@@ -1,15 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+
+  <style>
+    .circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50px;
+      background: #007bff;
+      margin: 100px auto;
+
+    }
+
+    .fade{
+      animation: fade 1s infinite alternate;
+    }
+
+    @keyframes fade {
+      0% {box-shadow: 0 0 0 0 rgba(0, 123, 255, .5);}      100% {
+
+        box-shadow: 0 0 10px 20px rgba(0, 123, 255, .5);
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <div>git33322是是是11</div>
-  <div>222</div>
+  <div class="circle fade"></div>
 </body>
+
 </html>
 
 
