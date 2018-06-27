@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      overflow: hidden;
+    }
+
+    .app {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      height: 220px;
+      background: #fff;
+      border-top: 1px solid #eee;
+      transition: all .35s;
+      transform: translate3d(0, 220px, 0);
+      z-index: 200;
+    }
+
+    .show {
+      transform: translate3d(0, 0, 0)
+    }
+
+    .picker {
+      position: absolute;
+      top: 39px;
+      bottom: 19px;
+      left: 0;
+      right: 0;
+    }
+
+    .wrapper {
+      height: 162px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .wrapper .wheel {
+      flex: 1;
+    }
+
+    .wheel-scroll {
+      text-align: center;
+      color: #333;
+      line-height: 30px;
+      list-style: none;
+      margin-top: 66px;
+    }
+
+    .wheel-item {
+      line-height: 30px;
+      height: 30px;
+      overflow: hidden;
+    }
+
+    .mask-top {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 65px;
+      z-index: 10;
+      background: -webkit-gradient(linear, left bottom, left top, from(hsla(0, 0%, 100%, .4)), to(hsla(0, 0%, 100%, .8)));
+      background: linear-gradient(0deg, hsla(0, 0%, 100%, .4), hsla(0, 0%, 100%, .8));
+      transform: translateZ(0);
+      pointer-events: none;
+    }
+
+    .mask-bottom {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 65px;
+      z-index: 10;
+      background: -webkit-gradient(linear, left top, left bottom, from(hsla(0, 0%, 100%, .4)), to(hsla(0, 0%, 100%, .8)));
+      background: linear-gradient(180deg, hsla(0, 0%, 100%, .4), hsla(0, 0%, 100%, .8));
+      transform: translateZ(0);
+      pointer-events: none;
+    }
+
+    .border-bottom-1px {
+      border-bottom: 1px solid #eee;
+    }
+
+    .border-top-1px {
+      border-top: 1px solid #eee;
+    }
+
+    .mask {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: rgba(37, 38, 45, .4);
+      opacity: 0;
+      transition: all .35s;
+    }
+
+    .mask-show {
+      opacity: 0.5;
+      z-index: 100;
+    }
+
+    .test {
+      width: 200px;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    button {
+      height: 30px;
+      padding: 5px;
+      border: none;
+      background: #fff;
+    }
+
+    .head {
+      padding: 5px 10px;
+    }
+
+    .ok {
+      float: right;
+      color: #007bff;
+    }
+
+    .cancel {
+      color: #999;
+    }
+  </style>
+</head>
+
+<body>
+  <button class="select">select</button><span class="addr"></span>
+  <div class="mask"></div>
+  <div class="app">
+    <div class="head">
+      <button class="cancel">取消</button>
+      <button class="ok">确定</button>
+    </div>
+    <div class="picker">
+      <div class="mask-top border-bottom-1px"></div>
+      <div class="mask-bottom border-top-1px"></div>
+      <div class="wrapper">
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+<script src="https://unpkg.com/better-scroll/dist/bscroll.min.js"></script>
+<script src="data.js"></script>
+<script>
+  let app = document.querySelector('.app')
+  let wrapper = document.querySelector('.wrapper')
+  let mask = document.querySelector('.mask')
+  let select = document.querySelector('.select')
+  let addr = document.querySelector('.addr')
+  let cancel = document.querySelector('.cancel')
+  let ok = document.querySelector('.ok')
+
+  let temp = [0, 0, 0]
+  let wheelScroll = []
+  let provinces = citys = areas = []
+  let data = [provinceList, cityList, areaList]
+
+  function getWheel(index = -1) {
+    provinces = provinceList
+    citys = cityList[provinces[temp[0]].value]
+    areas = areaList[citys[temp[1]].value]
+    for (let i = index + 1; i < data.length; i++) {
+      let arrData = []
+      if (i === 1) {
+        arrData = citys
+      } else if (i === 2) {
+        arrData = areas
+      } else {
+        arrData = provinces
+      }
+      getData(arrData)
+    }
+    initWheel()
+  }
+
+  function getData(arrData) {
+    let wheel = document.createElement('div')
+    let ul = document.createElement('ul')
+    wheel.className = 'wheel'
+    ul.className = 'wheel-scroll'
+    for (let j = 0; j < arrData.length; j++) {
+      let li = document.createElement('li')
+      li.className = 'wheel-item'
+      li.innerText = arrData[j].text
+      ul.appendChild(li)
+    }
+    wheel.appendChild(ul)
+    wrapper.appendChild(wheel)
+  }
+
+  function initWheel() {
+    for (let i = 0; i < data.length; i++) {
+      wheelScroll[i] && wheelScroll[i].destroy()
+      wheelScroll[i] = new BScroll(wrapper.children[i], {
+        probeType: 3,
+        wheel: {
+          selectedIndex: temp[i]
+        }
+      })
+      wheelScroll[i].on('scrollEnd', () => {
+        let selectedIndex = wheelScroll[i].getSelectedIndex()
+        if(temp[i] === selectedIndex){
+          return
+        }
+        if (i === 0) {
+          wrapper.children[1].remove()
+          wrapper.children[1].remove()
+          temp = [selectedIndex,0,0]
+        }
+        if (i === 1) {
+          wrapper.children[2].remove()
+          temp[1] = selectedIndex
+          temp[2] = 0
+        }
+        if (i === 2) {
+          temp[2] = selectedIndex
+          return
+        }
+        console.log(temp)
+        getWheel(i)
+      })
+    }
+  }
+
+  select.onclick = () => {
+    if (Array.prototype.includes.call(app.classList, 'show')) {
+      app.classList.remove('show')
+      mask.classList.remove('mask-show')
+      return
+    }
+    mask.classList.add('mask-show')
+    app.classList.add('show')
+  }
+
+  cancel.onclick = mask.onclick = select.onclick
+
+  ok.onclick = () => {
+    let [i,j,k] = temp
+    addr.innerText = `${provinces[i].text} ${citys[j].text} ${areas[k].text}`
+    cancel.click()
+  }
+
+  getWheel()
+</script>
