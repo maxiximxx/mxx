@@ -17,26 +17,137 @@
 
     }
 
-    .fade{
+    .fade {
       animation: fade 1s infinite alternate;
     }
 
     @keyframes fade {
-      0% {box-shadow: 0 0 0 0 rgba(0, 123, 255, .5);}      100% {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, .5);
+      }
+      100% {
 
         box-shadow: 0 0 10px 20px rgba(0, 123, 255, .5);
       }
+    }
+
+    .a {
+      width: 100px;
+      height: 100px;
+      border: 1px solid;
+      float: left;
+      margin-right: 50px;
+    }
+
+    .b {
+      width: 100px;
+      height: 100px;
+      float: left;
+      position: relative;
+    }
+
+    .top-1px::after {
+      content: '';
+      display: block;
+      border-top: 1px solid;
+      transform: scaleY(0.3333333);
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .right-1px::after {
+      content: '';
+      display: block;
+      border-right: 1px solid;
+      transform: scaleX(0.3333333);
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+
+    .bottom-1px::after {
+      content: '';
+      display: block;
+      border-bottom: 1px solid;
+      transform: scaleY(0.3333333);
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+
+    .left-1px::after {
+      content: '';
+      display: block;
+      border-left: 1px solid;
+      transform: scaleX(0.3333333);
+      position: absolute;
+      left: 0;
+      top: 0;
     }
   </style>
 </head>
 
 <body>
   <div class="circle fade"></div>
+  <div class="a"></div>
+  <div class="b top-1px right-1px bottom-1px left-1px"></div>
 </body>
 
 </html>
 
 
 <script>
+  let promise1 = new Promise((res, rej) => {
+    setTimeout(() => {
+      res('promise1')
+    }, 3000);
+  })
 
+  let promise2 = () => {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        res('promise2')
+      }, 5000);
+    })
+  }
+
+  // promise2().then(res2 => {
+  //   console.log(res2)
+  //   return promise1
+  // }).then(res1 => {
+  //   console.log(res1)
+  // })
+  // promise1.then(res1 => {
+  //   console.log('xx',res1)
+  // })
+  async function test() {
+    console.log('test')
+    let res2 = await promise2()
+    console.log(res2)
+    let res1 = await promise1
+    console.log(res1)
+    console.log('end')
+  }
+
+  // test()
+
+  function test2() {
+    let a, b = false
+    setTimeout(() => {
+      console.log('async')
+      b = true
+    }, 100);
+    for (let index = 0; index < 1000000; index++) {
+      if (!a) {
+        console.log('a', index)
+        a = true
+      }
+      if (b) {
+        console.log('b', index)
+      }
+    }
+    console.log('end')
+  }
+  test2()
 </script>
