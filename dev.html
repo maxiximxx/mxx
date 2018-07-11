@@ -1,16 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>dev</title>
+  <style>
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+  </style>
 </head>
+
 <body>
-  aa
-  master
-  dev
-  new test
-  origin test
+  <div class="header">hello world</div>
 </body>
+
 </html>
+
+<script>
+  // var arr = new Array(1000000).fill('abcdef')
+  let arr = [[1, 2], 3]; // 数组展平
+  let arr1 = [1, 2, 4, 4, 3, 3, 1, 5, 3];
+  function flatten(arr) {
+    console.log('xx', ...arr.map(x => Array.isArray(x) ? flatten(x) : x))
+    return [].concat(
+      ...arr.map(x => Array.isArray(x) ? flatten(x) : x)
+    )
+  }
+
+  function repeat(arr) {
+    let result = arr.filter((x, i, self) => {
+      return self.indexOf(x) === i && self.lastIndexOf(x) !== i
+    })
+    return result
+  }
+
+  // arr = flatten(arr)
+  // arr1 = repeat(arr1)
+
+  let money = 12312345
+
+  function fMoney(str) {
+    str = typeof str === 'string' ? Number(str).toFixed(2) : str.toFixed(2)
+    str = str + ''
+    let includesDot = false
+    let arr = str.split('').reverse()
+    let ret = []
+    for (let i = 0; i < arr.length; i++) {
+      ret.push(arr[i])
+      if (arr[i] === '.') {
+        ret = []
+        includesDot = true
+        continue
+      }
+      if ((i + 1) % 3 === 0) {
+        ret.push(',')
+      }
+    }
+    ret = ret.reverse().join('')
+    return includesDot ? ret + str.slice(str.indexOf('.')) : ret
+  }
+
+  console.log(fMoney(money))
+  console.log(money.toLocaleString())
+
+</script>

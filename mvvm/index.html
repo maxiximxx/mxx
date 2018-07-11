@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <input type="text" v-model="name.v">
+    <div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <h3>v-bind形式：</h3>
+              <h3 v-bind="name.v">dom 深度遍历</h3>
+              <h3>{{}}}形式：</h3>
+              <h3>{{ name }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <input type="text" v-model="testData1">
+    <h3>{{ testData1 }}</h3>
+    <input type="text" v-model="testData2">
+    <h3>{{ testData2 }}</h3>
+    <input type="checkbox" v-model="checkbox">212
+  </div>
+</body>
+
+</html>
+
+<script src="myVue.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script> -->
+
+<script>
+  // window.onload = function () {
+  var vm = new myVue({
+    // 构造函数
+    el: '#app', // dom
+    data: {
+      testData1: '仿Vue',
+      testData2: '极简双向绑定',
+      name:'12',
+      checkbox:true
+    }
+  })
+
+  // var vue = new Vue({
+  //   el: '#app',
+  //   data: {
+  //     testData1: '仿Vue',
+  //     testData2: '极简双向绑定',
+  //     name: { v: 'OBKoro1' },
+  //     checkbox: true
+  //   }
+  // })
+  // }
+</script>
