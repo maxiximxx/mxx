@@ -85,13 +85,25 @@
       left: 0;
       top: 0;
     }
+    .ab{
+      border:1px solid #fff000;
+    }
+    .ab span{
+      font-size: 16px;
+      transform: scale(.5);
+      display: inline-block;
+      transform-origin: left;
+    }
   </style>
 </head>
 
 <body>
   <div class="circle fade"></div>
-  <div class="a"></div>
-  <div class="b top-1px right-1px bottom-1px left-1px"></div>
+  <!-- <div class="a"></div>
+  <div class="b top-1px right-1px bottom-1px left-1px"></div> -->
+  <div class="ab">
+    <span>111111111111</span>
+  </div>
 </body>
 
 </html>
@@ -130,7 +142,7 @@
     console.log('end')
   }
 
-  // test()
+  test()
 
   function test2() {
     let a, b = false
@@ -149,5 +161,5 @@
     }
     console.log('end')
   }
-  test2()
+  // test2()
 </script>
